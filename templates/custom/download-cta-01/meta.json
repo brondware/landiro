@@ -1,0 +1,19 @@
+{
+  "id": "download-cta-01",
+  "type": "custom",
+  "name": "Download CTA — завантаження з лічильником",
+  "description": "Кастомна секція з кнопкою завантаження ZIP, посиланням на GitHub і живим лічильником завантажень",
+  "tags": ["download", "cta", "github", "counter", "custom"],
+  "vars": [
+    { "name": "HEADLINE",      "label": "Заголовок",              "type": "text",     "default": "Готові почати?" },
+    { "name": "SUBHEADLINE",   "label": "Підзаголовок",           "type": "textarea", "default": "Завантажте Landiro CMS і запустіть перший лендинг сьогодні. Безкоштовно і назавжди." },
+    { "name": "DL_TEXT",       "label": "Текст кнопки завантаження", "type": "text",  "default": "Завантажити Landiro CMS" },
+    { "name": "DL_URL",        "label": "URL завантаження",       "type": "url",      "default": "/download.php" },
+    { "name": "GH_TEXT",       "label": "Текст кнопки GitHub",    "type": "text",     "default": "Переглянути на GitHub" },
+    { "name": "GH_URL",        "label": "URL GitHub",             "type": "url",      "default": "https://github.com/brondware/landiro" },
+    { "name": "COUNTER_LABEL", "label": "Підпис лічильника",      "type": "text",     "default": "завантажень" },
+    { "name": "PHP_BADGE",     "label": "Бейдж PHP",              "type": "text",     "default": "PHP 8.1+" },
+    { "name": "LICENSE_BADGE", "label": "Бейдж ліцензії",         "type": "text",     "default": "MIT License" },
+    { "name": "SIZE_BADGE",    "label": "Бейдж розміру",          "type": "text",     "default": "Без БД" }
+  ]
+}
