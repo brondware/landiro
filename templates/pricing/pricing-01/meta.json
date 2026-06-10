@@ -1,0 +1,12 @@
+{
+  "id": "pricing-01",
+  "type": "pricing",
+  "name": "Ціна — З знижкою",
+  "description": "Блок ціни з перекресленою старою ціною, акційною і CTA кнопкою",
+  "tags": ["conversion", "popular"],
+  "vars": {
+    "--bg-color": { "label": "Фон", "type": "color", "default": "#ffffff" },
+    "--price-color": { "label": "Колір ціни", "type": "color", "default": "#FF5A1F" },
+    "--btn-bg": { "label": "Колір кнопки", "type": "color", "default": "#FF5A1F" }
+  }
+}

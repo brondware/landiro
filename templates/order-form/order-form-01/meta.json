@@ -1,0 +1,16 @@
+{
+  "id": "order-form-01",
+  "type": "order-form",
+  "name": "Форма замовлення — Базова",
+  "description": "Проста форма: ім'я + телефон + кнопка. З підключенням до обробника.",
+  "tags": ["popular", "conversion"],
+  "vars": {
+    "--bg-color": { "label": "Фон секції", "type": "color", "default": "#ffffff" },
+    "--title-color": { "label": "Колір заголовку", "type": "color", "default": "#0f172a" },
+    "--btn-bg": { "label": "Колір кнопки", "type": "color", "default": "#FF5A1F" },
+    "--btn-color": { "label": "Текст кнопки", "type": "color", "default": "#ffffff" },
+    "--padding-top": { "label": "Відступ зверху", "type": "range", "default": "60", "min": 0, "max": 160 },
+    "--padding-bottom": { "label": "Відступ знизу", "type": "range", "default": "60", "min": 0, "max": 160 }
+  },
+  "has_php": true
+}

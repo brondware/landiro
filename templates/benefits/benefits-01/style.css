@@ -1,0 +1,8 @@
+.cms-section-benefits { background: var(--bg-color, #f8fafc); padding: 60px 20px; }
+.ben-inner { max-width: 700px; margin: 0 auto; }
+.ben-title { font-size: clamp(22px, 5vw, 30px); font-weight: 800; color: var(--title-color, #0f172a); text-align: center; margin: 0 0 32px; }
+.ben-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+.ben-card { background: var(--card-bg, #fff); border-radius: 14px; padding: 24px 20px; box-shadow: 0 2px 12px rgba(0,0,0,.06); text-align: center; }
+.ben-icon { font-size: 36px; margin-bottom: 12px; }
+.ben-card h3 { font-size: 16px; font-weight: 700; color: var(--title-color, #0f172a); margin: 0 0 8px; }
+.ben-card p { font-size: 14px; color: var(--text-color, #64748b); line-height: 1.5; margin: 0; }

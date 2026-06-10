@@ -1,0 +1,13 @@
+{
+  "id": "product-grid-01",
+  "type": "product",
+  "name": "Сітка товарів",
+  "description": "3 картки товарів з фото, ціною, закресленою ціною та кнопкою замовлення",
+  "tags": ["product", "conversion", "catalog"],
+  "vars": {
+    "--bg-color": { "label": "Фон секції", "type": "color", "default": "#f8fafc" },
+    "--card-bg": { "label": "Фон картки", "type": "color", "default": "#ffffff" },
+    "--btn-bg": { "label": "Колір кнопки", "type": "color", "default": "#FF5A1F" },
+    "--badge-bg": { "label": "Колір бейджу знижки", "type": "color", "default": "#ef4444" }
+  }
+}

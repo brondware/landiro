@@ -1,0 +1,16 @@
+{
+  "id": "hero-01",
+  "type": "hero",
+  "name": "Hero — Класичний",
+  "description": "Головний банер з заголовком, підзаголовком і CTA кнопкою. Темний фон.",
+  "tags": ["popular", "mobile-first"],
+  "vars": {
+    "--bg-color": { "label": "Колір фону", "type": "color", "default": "#1A1A2E" },
+    "--title-color": { "label": "Колір заголовку", "type": "color", "default": "#FFFFFF" },
+    "--sub-color": { "label": "Колір підзаголовку", "type": "color", "default": "#94a3b8" },
+    "--btn-bg": { "label": "Колір кнопки", "type": "color", "default": "#FF5A1F" },
+    "--btn-color": { "label": "Текст кнопки", "type": "color", "default": "#FFFFFF" },
+    "--padding-top": { "label": "Відступ зверху", "type": "range", "default": "80", "min": 20, "max": 200 },
+    "--padding-bottom": { "label": "Відступ знизу", "type": "range", "default": "80", "min": 20, "max": 200 }
+  }
+}

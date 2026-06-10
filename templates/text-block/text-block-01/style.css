@@ -1,0 +1,6 @@
+.cms-section-text-block { background: var(--bg-color, #fff); padding: 50px 20px; }
+.tb-inner { max-width: 640px; margin: 0 auto; }
+.tb-title { font-size: clamp(20px, 4.5vw, 26px); font-weight: 800; color: #0f172a; margin: 0 0 20px; }
+.tb-content h3 { font-size: 16px; font-weight: 700; color: #0f172a; margin: 20px 0 8px; }
+.tb-content h3:first-child { margin-top: 0; }
+.tb-content p { font-size: 14px; color: var(--text-color, #374151); line-height: 1.65; margin: 0; }

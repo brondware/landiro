@@ -1,0 +1,14 @@
+{
+  "id": "benefits-01",
+  "type": "benefits",
+  "name": "Переваги — 3 картки",
+  "description": "Три картки з іконкою, заголовком та текстом",
+  "tags": ["popular"],
+  "vars": {
+    "--bg-color": { "label": "Фон секції", "type": "color", "default": "#f8fafc" },
+    "--card-bg": { "label": "Фон картки", "type": "color", "default": "#ffffff" },
+    "--title-color": { "label": "Заголовок", "type": "color", "default": "#0f172a" },
+    "--text-color": { "label": "Текст", "type": "color", "default": "#64748b" },
+    "--icon-color": { "label": "Колір іконок", "type": "color", "default": "#6366f1" }
+  }
+}

@@ -1,0 +1,7 @@
+.cms-section-video { background: var(--bg-color, #0f172a); padding: 60px 20px; text-align: center; }
+.vid-inner { max-width: 640px; margin: 0 auto; }
+.vid-title { font-size: clamp(22px, 5vw, 30px); font-weight: 800; color: var(--title-color, #fff); margin: 0 0 8px; }
+.vid-sub { color: rgba(255,255,255,.6); font-size: 14px; margin: 0 0 24px; }
+.vid-wrap { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 14px; overflow: hidden; box-shadow: 0 16px 48px rgba(0,0,0,.5); }
+.vid-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.vid-note { color: rgba(255,255,255,.35); font-size: 12px; margin-top: 14px; }

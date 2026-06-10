@@ -1,0 +1,11 @@
+{
+  "id": "before-after-01",
+  "type": "before-after",
+  "name": "До/Після — слайдер",
+  "description": "Інтерактивний слайдер порівняння до і після. Перетягніть розподільник.",
+  "tags": ["conversion", "visual"],
+  "vars": {
+    "--bg-color": { "label": "Фон секції", "type": "color", "default": "#f8fafc" },
+    "--title-color": { "label": "Колір заголовку", "type": "color", "default": "#1e293b" }
+  }
+}

@@ -1,0 +1,23 @@
+# Runtime data — do not commit
+data/landings/
+data/orders/
+data/analytics/
+data/uploads/
+data/history/
+data/presets/
+data/login_attempts/
+data/settings.json
+
+# Keep .htaccess files in data/
+!data/.htaccess
+!data/uploads/.htaccess
+
+# Internal dev notes
+DEVELOPMENT.md
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

@@ -1,0 +1,11 @@
+{
+  "id": "text-block-01",
+  "type": "text-block",
+  "name": "Текстовий блок",
+  "description": "Вільний текстовий блок для умов, доставки, опису",
+  "tags": ["utility"],
+  "vars": {
+    "--bg-color":   { "label": "Фон",    "type": "color", "default": "#ffffff" },
+    "--text-color": { "label": "Текст",  "type": "color", "default": "#374151" }
+  }
+}

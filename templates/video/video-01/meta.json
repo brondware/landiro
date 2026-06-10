@@ -1,0 +1,11 @@
+{
+  "id": "video-01",
+  "type": "video",
+  "name": "Відео — YouTube / Vimeo",
+  "description": "Вбудоване відео з заголовком і підписом",
+  "tags": ["media"],
+  "vars": {
+    "--bg-color":    { "label": "Фон",        "type": "color", "default": "#0f172a" },
+    "--title-color": { "label": "Заголовок",  "type": "color", "default": "#ffffff" }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "cta-01",
+  "type": "cta",
+  "name": "CTA — Яскравий банер",
+  "description": "Повноширокий банер з заголовком і кнопкою замовлення",
+  "tags": ["conversion", "popular"],
+  "vars": {
+    "--bg-color":    { "label": "Фон",         "type": "color", "default": "#FF5A1F" },
+    "--title-color": { "label": "Заголовок",   "type": "color", "default": "#ffffff" },
+    "--btn-bg":      { "label": "Кнопка",      "type": "color", "default": "#ffffff" },
+    "--btn-color":   { "label": "Текст кнопки","type": "color", "default": "#FF5A1F" }
+  }
+}

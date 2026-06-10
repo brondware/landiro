@@ -1,0 +1,12 @@
+{
+  "id": "how-it-works-01",
+  "type": "how-it-works",
+  "name": "Як це працює — 3 кроки",
+  "description": "Три кроки з номерами, іконками і описами",
+  "tags": ["popular"],
+  "vars": {
+    "--bg-color":     { "label": "Фон",         "type": "color", "default": "#ffffff" },
+    "--step-color":   { "label": "Колір кроків","type": "color", "default": "#6366f1" },
+    "--title-color":  { "label": "Заголовок",   "type": "color", "default": "#0f172a" }
+  }
+}

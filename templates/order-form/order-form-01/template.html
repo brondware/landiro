@@ -1,0 +1,21 @@
+<div class="of-inner" id="order">
+  <p class="of-tag">📦 Залишилось 7 штук за акційною ціною</p>
+  <h2 class="of-title">Замовте зі знижкою 40%</h2>
+  <p class="of-sub">Заповніть форму і ми зателефонуємо для підтвердження протягом 5 хвилин</p>
+  <form class="of-form" onsubmit="submitOrderForm(event, this)">
+    <div class="of-field">
+      <input type="text" name="name" placeholder="Ваше ім'я" required autocomplete="name">
+    </div>
+    <div class="of-field">
+      <input type="tel" name="phone" placeholder="+380 ___ ___ __ __" required autocomplete="tel">
+    </div>
+    <input type="text" name="_hp" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" aria-hidden="true">
+    <button type="submit" class="of-btn">Замовити зараз →</button>
+    <p class="of-note">🔒 Ваші дані в безпеці · Без передоплати</p>
+  </form>
+  <div class="of-success" id="of-success" style="display:none">
+    <div class="of-success-icon">✅</div>
+    <h3>Замовлення прийнято!</h3>
+    <p>Ми зателефонуємо протягом 5 хвилин</p>
+  </div>
+</div>

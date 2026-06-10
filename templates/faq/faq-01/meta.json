@@ -1,0 +1,11 @@
+{
+  "id": "faq-01",
+  "type": "faq",
+  "name": "FAQ — Акордеон",
+  "description": "Питання та відповіді у вигляді акордеону",
+  "tags": ["popular"],
+  "vars": {
+    "--bg-color": { "label": "Фон", "type": "color", "default": "#f8fafc" },
+    "--accent-color": { "label": "Акцентний колір", "type": "color", "default": "#6366f1" }
+  }
+}

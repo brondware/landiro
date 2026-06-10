@@ -1,0 +1,12 @@
+{
+  "id": "trust-01",
+  "type": "trust",
+  "name": "Довіра — Гарантії та лічильники",
+  "description": "Блок із гарантіями, сертифікатами та лічильниками клієнтів",
+  "tags": ["social-proof"],
+  "vars": {
+    "--bg-color":     { "label": "Фон",          "type": "color", "default": "#f8fafc" },
+    "--accent-color": { "label": "Акцент",        "type": "color", "default": "#6366f1" },
+    "--text-color":   { "label": "Текст",         "type": "color", "default": "#0f172a" }
+  }
+}

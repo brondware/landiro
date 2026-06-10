@@ -1,0 +1,12 @@
+{
+  "id": "countdown-01",
+  "type": "countdown",
+  "name": "Таймер зворотнього відліку",
+  "description": "Секція-таймер для створення терміновості. Скидається кожні 24 години.",
+  "tags": ["conversion", "urgency"],
+  "vars": {
+    "--bg-color": { "label": "Фон секції", "type": "color", "default": "#1A1A2E" },
+    "--title-color": { "label": "Колір тексту", "type": "color", "default": "#ffffff" },
+    "--digit-bg": { "label": "Фон цифр", "type": "color", "default": "#FF5A1F" }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "id": "testimonials-01",
+  "type": "testimonials",
+  "name": "Відгуки — картки",
+  "description": "3 картки відгуків з ім'ям, зірками та текстом",
+  "tags": ["social-proof"],
+  "vars": {
+    "--bg-color": { "label": "Фон секції", "type": "color", "default": "#f8fafc" },
+    "--card-bg": { "label": "Фон картки", "type": "color", "default": "#ffffff" },
+    "--star-color": { "label": "Колір зірок", "type": "color", "default": "#FFD700" }
+  }
+}

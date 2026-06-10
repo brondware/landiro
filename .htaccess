@@ -1,0 +1,18 @@
+Options -Indexes
+
+# Захист системних файлів
+<FilesMatch "(config\.php|DEVELOPMENT\.md)">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+# ЧПУ для лендингів
+RewriteEngine On
+
+# Лендинги: /landings/slug/ → /landings/index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^landings/([a-z0-9-]+)/?$ landings/index.php?slug=$1 [QSA,L]
+
+# Форма замовлення в лендингу (POST handler)
+RewriteRule ^landings/([a-z0-9-]+)/order/?$ landings/index.php?slug=$1 [QSA,L]

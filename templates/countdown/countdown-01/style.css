@@ -1,0 +1,9 @@
+.cms-section-countdown { background: var(--bg-color, #1A1A2E); padding: 40px 20px; text-align: center; }
+.cd-inner { max-width: 500px; margin: 0 auto; }
+.cd-label { color: var(--title-color, #fff); font-size: 15px; font-weight: 600; margin: 0 0 20px; opacity: .85; }
+.cd-timer { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 16px; }
+.cd-unit { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.cd-digit { background: var(--digit-bg, #FF5A1F); color: #fff; font-size: clamp(36px, 9vw, 56px); font-weight: 800; font-variant-numeric: tabular-nums; border-radius: 10px; padding: 10px 16px; min-width: 72px; display: inline-block; text-align: center; line-height: 1; }
+.cd-unit-label { color: var(--title-color, #fff); font-size: 11px; opacity: .6; text-transform: uppercase; letter-spacing: 1px; }
+.cd-sep { color: var(--title-color, #fff); font-size: 40px; font-weight: 700; opacity: .6; line-height: 1; margin-top: -8px; }
+.cd-sub { color: var(--title-color, #fff); font-size: 13px; opacity: .55; margin: 0; }

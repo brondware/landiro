@@ -1,0 +1,13 @@
+{
+  "id": "product-01",
+  "type": "product",
+  "name": "Продукт — Фото + Опис",
+  "description": "Велике фото товару, назва, характеристики, ціна і кнопка",
+  "tags": ["popular", "product"],
+  "vars": {
+    "--bg-color":    { "label": "Фон",          "type": "color", "default": "#ffffff" },
+    "--title-color": { "label": "Заголовок",    "type": "color", "default": "#0f172a" },
+    "--badge-bg":    { "label": "Бейдж",        "type": "color", "default": "#FF5A1F" },
+    "--btn-bg":      { "label": "Кнопка",       "type": "color", "default": "#FF5A1F" }
+  }
+}

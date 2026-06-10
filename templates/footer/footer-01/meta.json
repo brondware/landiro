@@ -1,0 +1,11 @@
+{
+  "id": "footer-01",
+  "type": "footer",
+  "name": "Підвал — Базовий",
+  "description": "Підвал з назвою, контактами та копірайтом",
+  "tags": ["minimal"],
+  "vars": {
+    "--bg-color": { "label": "Фон підвалу", "type": "color", "default": "#1e293b" },
+    "--text-color": { "label": "Колір тексту", "type": "color", "default": "#94a3b8" }
+  }
+}

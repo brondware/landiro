@@ -1,0 +1,10 @@
+{
+  "id": "gallery-01",
+  "type": "gallery",
+  "name": "Галерея — Сітка фото",
+  "description": "Адаптивна сітка фотографій (результати, до/після, товар)",
+  "tags": ["visual"],
+  "vars": {
+    "--bg-color": { "label": "Фон", "type": "color", "default": "#f8fafc" }
+  }
+}

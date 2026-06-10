@@ -1,0 +1,11 @@
+.cms-section-footer { background: var(--bg-color, #1e293b); padding: 40px 20px 28px; }
+.ft-inner { max-width: 600px; margin: 0 auto; text-align: center; display: flex; flex-direction: column; gap: 16px; }
+.ft-logo { color: #f8fafc; font-size: 18px; font-weight: 700; }
+.ft-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.ft-links a { color: var(--text-color, #94a3b8); font-size: 13px; text-decoration: none; transition: color .15s; }
+.ft-links a:hover { color: #f8fafc; }
+.ft-contacts { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; }
+.ft-contacts a { color: var(--text-color, #94a3b8); font-size: 14px; text-decoration: none; }
+.ft-contacts a:hover { color: #f8fafc; }
+.ft-copy { color: #475569; font-size: 12px; margin: 0; }
+.ft-disclaimer { color: #334155; font-size: 11px; margin: 0; }

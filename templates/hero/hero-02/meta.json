@@ -1,0 +1,14 @@
+{
+  "id": "hero-02",
+  "type": "hero",
+  "name": "Hero — З фото товару",
+  "description": "Банер із зображенням товару праворуч і текстом ліворуч",
+  "tags": ["popular", "product"],
+  "vars": {
+    "--bg-color":   { "label": "Фон",             "type": "color", "default": "#ffffff" },
+    "--title-color":{ "label": "Заголовок",        "type": "color", "default": "#0f172a" },
+    "--sub-color":  { "label": "Підзаголовок",     "type": "color", "default": "#64748b" },
+    "--btn-bg":     { "label": "Кнопка",           "type": "color", "default": "#FF5A1F" },
+    "--btn-color":  { "label": "Текст кнопки",     "type": "color", "default": "#ffffff" }
+  }
+}
