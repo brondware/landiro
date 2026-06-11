@@ -1,5 +1,5 @@
 <?php
-define('CMS_VERSION', '1.0.0');
+define('CMS_VERSION', '1.0.1');
 define('CMS_NAME', 'Landiro CMS');
 
 // Admin credentials (password: admin123 — змініть після першого входу)

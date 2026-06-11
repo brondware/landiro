@@ -338,7 +338,7 @@ switch ($action) {
         respond(['success' => true, 'settings' => Settings::all()]);
 
     case 'settings_save':
-        $allowed = ['telegram_token', 'telegram_chat_id', 'telegram_enabled', 'email_to', 'email_enabled', 'webhook_url'];
+        $allowed = ['telegram_token', 'telegram_chat_id', 'telegram_enabled', 'email_to', 'email_enabled', 'webhook_url', 'homepage_slug'];
         foreach ($allowed as $k) {
             if (array_key_exists($k, $input)) Settings::set($k, $input[$k]);
         }

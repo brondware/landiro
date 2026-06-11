@@ -127,19 +127,6 @@ $recentOrders = array_slice($recentOrders, 0, 8);
     <!-- Recent Orders Widget -->
     <aside>
       <div style="background:#fff;border:1.5px solid var(--c-border);border-radius:14px;padding:18px">
-        <?php
-          $dlFile = DATA_PATH . '/downloads.json';
-          $dlData = file_exists($dlFile) ? json_decode(file_get_contents($dlFile), true) : [];
-          $dlCount = (int)($dlData['count'] ?? 0);
-          $dlLast  = $dlData['last'] ?? null;
-        ?>
-        <div style="background:linear-gradient(135deg,#6366f1,#818cf8);border-radius:12px;padding:16px 18px;margin-bottom:16px;color:#fff">
-          <div style="font-size:11px;font-weight:600;opacity:.8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Завантажень CMS</div>
-          <div style="font-size:2rem;font-weight:800;line-height:1;margin-bottom:4px"><?= number_format($dlCount) ?></div>
-          <?php if ($dlLast): ?>
-          <div style="font-size:11px;opacity:.7">Останнє: <?= date('d.m.Y H:i', strtotime($dlLast)) ?></div>
-          <?php endif; ?>
-        </div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
           <h3 style="font-size:14px;font-weight:700;margin:0">Останні замовлення</h3>
           <a href="orders.php" style="font-size:12px;color:var(--c-primary);text-decoration:none">Всі →</a>

@@ -8,12 +8,16 @@ require_once dirname(__DIR__) . '/core/Telegram.php';
 require_once dirname(__DIR__) . '/core/Mailer.php';
 require_once dirname(__DIR__) . '/core/Webhook.php';
 
-// Визначаємо slug з URL
-$requestUri = $_SERVER['REQUEST_URI'] ?? '';
-$basePath = parse_url(LANDINGS_URL, PHP_URL_PATH);
-$path = substr($requestUri, strlen($basePath));
-$path = trim($path, '/');
-$slug = strtok($path, '/') ?: '';
+// Slug може бути переданий від index.php (homepage) або розпарсений з URL
+if (!empty($_homepage_slug)) {
+    $slug = $_homepage_slug;
+} else {
+    $requestUri = $_SERVER['REQUEST_URI'] ?? '';
+    $basePath   = parse_url(LANDINGS_URL, PHP_URL_PATH);
+    $path       = substr($requestUri, strlen($basePath));
+    $path       = trim($path, '/');
+    $slug       = strtok($path, '/') ?: '';
+}
 
 if (!$slug) {
     http_response_code(404);

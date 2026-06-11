@@ -1,6 +1,8 @@
 <?php
 require_once dirname(__DIR__) . '/config.php';
 require_once dirname(__DIR__) . '/core/Auth.php';
+require_once dirname(__DIR__) . '/core/Settings.php';
+require_once dirname(__DIR__) . '/core/Landing.php';
 
 Auth::requireLogin();
 
@@ -225,6 +227,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </table>
     </div>
 
+    <!-- Homepage Landing -->
+    <?php
+    $homepageManager = new Landing();
+    $allLandings     = $homepageManager->getAll();
+    $currentHome     = Settings::get('homepage_slug', '');
+    ?>
+    <div class="settings-card">
+      <h2>Головна сторінка</h2>
+      <p style="font-size:13px;color:var(--c-muted);margin:-8px 0 18px">
+        Обраний лендинг відображатиметься замість стандартної головної сторінки сайту
+        (<code><?= htmlspecialchars(BASE_URL) ?>/</code>).
+        Якщо не обрано — відкривається адмін-панель або сторінка входу.
+      </p>
+      <div class="form-field">
+        <label>Лендинг для головної сторінки</label>
+        <select id="homepage_slug" style="width:100%">
+          <option value="">— не встановлено —</option>
+          <?php foreach ($allLandings as $lp): ?>
+          <option value="<?= htmlspecialchars($lp['slug']) ?>"
+            <?= $lp['slug'] === $currentHome ? 'selected' : '' ?>>
+            <?= htmlspecialchars($lp['title'] ?: $lp['slug']) ?>
+            <?= $lp['published'] ? '' : ' (не опубліковано)' ?>
+          </option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+      <?php if ($currentHome): ?>
+      <p style="font-size:12px;color:var(--c-muted);margin:-4px 0 14px">
+        Поточна головна:
+        <a href="<?= htmlspecialchars(BASE_URL) ?>/" target="_blank" style="color:#6366f1"><?= htmlspecialchars(BASE_URL) ?>/</a>
+      </p>
+      <?php endif; ?>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary" onclick="saveHomepage()">Зберегти</button>
+        <?php if ($currentHome): ?>
+        <button class="btn btn-ghost" onclick="clearHomepage()">Скинути</button>
+        <?php endif; ?>
+      </div>
+      <p id="homepage-status" style="font-size:13px;margin-top:10px;display:none"></p>
+    </div>
+
   </main>
 </div>
 <script src="<?= BASE_URL ?>/assets/js/admin.js"></script>
@@ -275,6 +318,25 @@ async function saveTelegram() {
     el.style.color = '#dc2626';
     el.textContent = '✗ Помилка збереження';
   }
+}
+
+async function saveHomepage() {
+  const slug = document.getElementById('homepage_slug').value;
+  const res  = await api('settings_save', { homepage_slug: slug });
+  const el   = document.getElementById('homepage-status');
+  el.style.display = 'block';
+  if (res.success) {
+    el.style.color = '#15803d';
+    el.textContent = slug ? '✓ Збережено. Оновіть сторінку щоб побачити кнопку «Скинути».' : '✓ Головна сторінка скинута.';
+  } else {
+    el.style.color = '#dc2626';
+    el.textContent = '✗ Помилка збереження';
+  }
+}
+
+async function clearHomepage() {
+  document.getElementById('homepage_slug').value = '';
+  await saveHomepage();
 }
 
 async function testTelegram() {
