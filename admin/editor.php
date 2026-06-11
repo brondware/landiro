@@ -225,6 +225,7 @@ const ADMIN_URL     = <?= json_encode(ADMIN_URL) ?>;
 const BASE_URL      = <?= json_encode(BASE_URL) ?>;
 const SECTION_VARS  = <?= json_encode($section['data']['vars'] ?? []) ?>;
 const AB_VARIANT    = <?= json_encode($isVariantB ? 'b' : 'a') ?>;
+const CSRF_TOKEN    = <?= json_encode(Auth::csrf()) ?>;
 
 /* Auto-resize iframe to fit content */
 (function() {

@@ -320,18 +320,19 @@ HTML;
         $js = $section['js'] ?? '';
         $vars = $section['data']['vars'] ?? [];
 
-        // Load from template files when html is not pre-rendered
-        if ($html === '' && !empty($section['template'])) {
+        // Load from template files when content is not stored in JSON
+        if (!empty($section['template'])) {
             $tplDir = TEMPLATES_PATH . '/' . $type . '/' . $section['template'];
-            $data   = $section['data'] ?? [];
 
-            if (file_exists($tplDir . '/template.html')) {
-                $tplHtml = file_get_contents($tplDir . '/template.html');
-                foreach ($data as $k => $v) {
-                    $tplHtml = str_replace('{{' . $k . '}}', htmlspecialchars((string)$v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), $tplHtml);
+            if ($html === '') {
+                $data = $section['data'] ?? [];
+                if (file_exists($tplDir . '/template.html')) {
+                    $tplHtml = file_get_contents($tplDir . '/template.html');
+                    foreach ($data as $k => $v) {
+                        $tplHtml = str_replace('{{' . $k . '}}', htmlspecialchars((string)$v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), $tplHtml);
+                    }
+                    $html = preg_replace('/\{\{[A-Z0-9_]+\}\}/', '', $tplHtml);
                 }
-                // Clear any unreplaced placeholders
-                $html = preg_replace('/\{\{[A-Z0-9_]+\}\}/', '', $tplHtml);
             }
             if ($css === '' && file_exists($tplDir . '/style.css')) {
                 $css = file_get_contents($tplDir . '/style.css');
