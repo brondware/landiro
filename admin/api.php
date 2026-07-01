@@ -159,6 +159,14 @@ switch ($action) {
         $data = $input['data'] ?? [];
         $allowed = ['html', 'css', 'js', 'php', 'visible', 'data'];
         $updateData = array_intersect_key($data, array_flip($allowed));
+        // Strip editor-injected attributes before saving (browser may send stale iframe HTML)
+        if (!empty($updateData['html'])) {
+            $h = $updateData['html'];
+            $h = preg_replace('/\s*contenteditable="[^"]*"/', '', $h);
+            $h = preg_replace('/\s*spellcheck="[^"]*"/', '', $h);
+            $h = preg_replace('/\s*style="[^"]*(?:translate|rotate|scale|transform|opacity)\s*:[^"]*"/', '', $h);
+            $updateData['html'] = $h;
+        }
         $ok = $landingManager->updateSection($slug, $sectionId, $updateData);
         respond(['success' => $ok]);
 

@@ -112,8 +112,26 @@ function replaceImage(index, src) {
 /* ── Send section HTML to parent ───────────────────────── */
 function sendHtml() {
   const sectionEl = document.getElementById('section-' + SECTION_ID);
-  const html = sectionEl ? sectionEl.innerHTML.trim() : '';
-  window.parent.postMessage({ type: 'html-response', html }, '*');
+  if (!sectionEl) { window.parent.postMessage({ type: 'html-response', html: '' }, '*'); return; }
+
+  /* Clone so we don't mutate the live DOM */
+  const clone = sectionEl.cloneNode(true);
+
+  /* Strip editor-injected attributes */
+  clone.querySelectorAll('[contenteditable]').forEach(el => {
+    el.removeAttribute('contenteditable');
+    el.removeAttribute('spellcheck');
+  });
+
+  /* Strip GSAP runtime inline styles (translate/transform/opacity set by animations) */
+  clone.querySelectorAll('[style]').forEach(el => {
+    const s = el.getAttribute('style') || '';
+    if (/translate:|rotate:|scale:|transform:|opacity:/.test(s)) {
+      el.removeAttribute('style');
+    }
+  });
+
+  window.parent.postMessage({ type: 'html-response', html: clone.innerHTML.trim() }, '*');
 }
 
 /* ── Inline edit ────────────────────────────────────────── */
@@ -134,6 +152,9 @@ function enableInlineEdit() {
       ['DIV','P','SECTION','ARTICLE','H1','H2','H3','H4','H5','H6','UL','OL','TABLE'].includes(c.tagName)
     );
     if (hasBlock) return;
+    /* Skip navigation links — keep them clickable for preview testing */
+    const href = el.getAttribute('href');
+    if (el.tagName === 'A' && href && href !== '#' && !href.startsWith('javascript')) return;
 
     el.setAttribute('contenteditable', 'true');
     el.setAttribute('spellcheck', 'false');
