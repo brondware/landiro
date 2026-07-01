@@ -133,21 +133,25 @@ switch ($action) {
         $type = $input['type'] ?? 'custom';
         $templateId = $input['template'] ?? '';
         $tmpl = $templateManager->get($type, $templateId);
+        // For template sections with vars: keep html empty so renderer uses template.html + vars
+        // (pre-populating html creates a static snapshot that ignores future var changes)
+        $tmplVars = ($tmpl && !empty($tmpl['vars'])) ? $tmpl['vars'] : [];
+        $initialHtml = ($templateId && $tmplVars)
+            ? ''
+            : ($tmpl['html'] ?? '<div class="section-placeholder"><p>Новa секція: ' . htmlspecialchars($type) . '</p></div>');
         $section = [
             'type'     => $type,
             'template' => $templateId,
             'visible'  => true,
-            'html'     => $tmpl['html'] ?? '<div class="section-placeholder"><p>Новa секція: ' . htmlspecialchars($type) . '</p></div>',
+            'html'     => $initialHtml,
             'css'      => $tmpl['css'] ?? '',
             'js'       => $tmpl['js'] ?? '',
             'php'      => $tmpl['php'] ?? '',
             'data'     => ['vars' => []],
         ];
         // Ініціалізуємо CSS змінні з мети шаблону
-        if ($tmpl && !empty($tmpl['vars'])) {
-            foreach ($tmpl['vars'] as $varName => $varDef) {
-                $section['data']['vars'][$varName] = $varDef['default'] ?? '';
-            }
+        foreach ($tmplVars as $varName => $varDef) {
+            $section['data']['vars'][$varName] = $varDef['default'] ?? '';
         }
         $result = $landingManager->addSection($slug, $section);
         if (!$result) respond(['success' => false, 'error' => 'Лендинг не знайдено']);
@@ -166,6 +170,19 @@ switch ($action) {
             $h = preg_replace('/\s*spellcheck="[^"]*"/', '', $h);
             $h = preg_replace('/\s*style="[^"]*(?:translate|rotate|scale|transform|opacity)\s*:[^"]*"/', '', $h);
             $updateData['html'] = $h;
+        }
+        // When only vars are updated (no html in payload), clear stored html on template sections
+        // so the renderer always uses template.html + current vars (links/text always in sync)
+        if (!array_key_exists('html', $updateData) && !empty($updateData['data']['vars'])) {
+            $varUpdateLanding = $landingManager->get($slug);
+            if ($varUpdateLanding) {
+                foreach ($varUpdateLanding['sections'] as $varSec) {
+                    if ($varSec['id'] === $sectionId && !empty($varSec['template'])) {
+                        $updateData['html'] = '';
+                        break;
+                    }
+                }
+            }
         }
         $ok = $landingManager->updateSection($slug, $sectionId, $updateData);
         respond(['success' => $ok]);
