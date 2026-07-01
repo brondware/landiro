@@ -1,8 +1,8 @@
 <?php
 class Template {
-    private string $templatesPath;
+    private $templatesPath;
 
-    public static array $SECTION_TYPES = [
+    public static $SECTION_TYPES = [
         'hero'         => ['label' => 'Hero / Банер',       'icon' => 'layout', 'color' => '#6366f1'],
         'benefits'     => ['label' => 'Переваги',           'icon' => 'star',   'color' => '#f59e0b'],
         'product'      => ['label' => 'Продукт',            'icon' => 'package','color' => '#10b981'],

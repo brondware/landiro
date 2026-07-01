@@ -1,8 +1,8 @@
 <?php
 class Settings {
-    private static string $file = '';
-    private static array $data  = [];
-    private static bool  $loaded = false;
+    private static $file = '';
+    private static $data  = [];
+    private static $loaded = false;
 
     public static function init(): void {
         self::$file = DATA_PATH . '/settings.json';
@@ -14,12 +14,12 @@ class Settings {
         }
     }
 
-    public static function get(string $key, mixed $default = null): mixed {
+    public static function get(string $key, $default = null) {
         self::init();
         return self::$data[$key] ?? $default;
     }
 
-    public static function set(string $key, mixed $value): void {
+    public static function set(string $key, $value): void {
         self::init();
         self::$data[$key] = $value;
     }

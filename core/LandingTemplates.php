@@ -12,30 +12,33 @@ class LandingTemplates {
 
     public static function buildSections(string $tplId): array {
         $tm  = new Template();
-        $map = match($tplId) {
-            'product' => [
+        if ($tplId === 'product') {
+            $map = [
                 ['hero',       'hero-01'],
                 ['benefits',   'benefits-01'],
                 ['pricing',    'pricing-01'],
                 ['order-form', 'order-form-01'],
                 ['footer',     'footer-01'],
-            ],
-            'service' => [
+            ];
+        } elseif ($tplId === 'service') {
+            $map = [
                 ['hero',         'hero-01'],
                 ['how-it-works', null],
                 ['testimonials', 'testimonials-01'],
                 ['order-form',   'order-form-01'],
                 ['footer',       'footer-01'],
-            ],
-            'info' => [
+            ];
+        } elseif ($tplId === 'info') {
+            $map = [
                 ['hero',       'hero-01'],
                 ['text-block', null],
                 ['benefits',   'benefits-01'],
                 ['pricing',    'pricing-01'],
                 ['order-form', 'order-form-01'],
-            ],
-            default => [],
-        };
+            ];
+        } else {
+            $map = [];
+        }
 
         $sections = [];
         foreach ($map as [$type, $tId]) {

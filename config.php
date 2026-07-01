@@ -1,10 +1,19 @@
 <?php
-define('CMS_VERSION', '1.0.1');
+define('CMS_VERSION', '1.0.2');
 define('CMS_NAME', 'Landiro CMS');
+
+// Updates
+define('UPDATE_CHECK_URL', 'https://community.landiro.cc/api/releases.php');
+define('UPDATE_ENABLED',   true);
+
+// Community news feed
+define('NEWS_API_URL',     'https://community.landiro.cc/api/news.php');
+// Community library API
+define('LIBRARY_API_URL',  'https://community.landiro.cc/api/library.php');
 
 // Admin credentials (password: admin123 — змініть після першого входу)
 define('ADMIN_LOGIN', 'admin');
-define('ADMIN_PASSWORD', '$2y$12$Z0xHiQ507aZjOZsB/Jdl8euF.jUzJCqfnETXVrYcKPTxsbm3Hr2ra'); // оновлено 2026-06-10 10:03
+define('ADMIN_PASSWORD', '$2y$10$E80NyYxVZg/Mtb0jThV39uONyAYbACotLNqEcKg4IPX7VSDxESQXe'); // default: admin123 — змінити через setup.php
 
 // Paths
 define('ROOT_PATH', __DIR__);
@@ -72,6 +81,23 @@ if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
 // Session
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
+}
+
+// PHP 7.x polyfills
+if (!function_exists('str_starts_with')) {
+    function str_starts_with(string $haystack, string $needle): bool {
+        return strncmp($haystack, $needle, strlen($needle)) === 0;
+    }
+}
+if (!function_exists('str_ends_with')) {
+    function str_ends_with(string $haystack, string $needle): bool {
+        return $needle === '' || substr($haystack, -strlen($needle)) === $needle;
+    }
+}
+if (!function_exists('str_contains')) {
+    function str_contains(string $haystack, string $needle): bool {
+        return strpos($haystack, $needle) !== false;
+    }
 }
 
 // Global settings (data/settings.json)

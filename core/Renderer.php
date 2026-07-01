@@ -68,7 +68,7 @@ class Renderer {
             $snapPixel = "<script>(function(e,t,n){if(e.snaptr)return;var a=e.snaptr=function(){a.handleRequest?a.handleRequest.apply(a,arguments):a.queue.push(arguments)};a.queue=[];var s='script';r=t.createElement(s);r.async=!0;r.src=n;var u=t.getElementsByTagName(s)[0];u.parentNode.insertBefore(r,u)})(window,document,'https://sc-static.net/scevent.min.js');snaptr('init','{$snapId}');snaptr('track','PAGE_VIEW');</script>";
         }
 
-        $customCss = !empty($gs['custom_css']) ? '<style>' . $gs['custom_css'] . '</style>' : '';
+        $customCss = !empty($gs['custom_css']) ? '<style>' . $this->normalizeUploadUrls($gs['custom_css']) . '</style>' : '';
         $headScripts = $scripts['head'] ?? '';
         $bodyEndScripts = $scripts['body_end'] ?? '';
 
@@ -125,10 +125,10 @@ HTML;
                     ? preg_replace('/[^0-9+]/', '', $val)
                     : $val;
                 $href  = str_replace('{v}', $urlVal, $d['url']);
-                $label = match($type) {
-                    'whatsapp' => 'WhatsApp', 'viber' => 'Viber',
-                    'telegram' => 'Telegram', 'phone'  => htmlspecialchars($val),
-                };
+                if ($type === 'whatsapp')     $label = 'WhatsApp';
+                elseif ($type === 'viber')    $label = 'Viber';
+                elseif ($type === 'telegram') $label = 'Telegram';
+                else                          $label = htmlspecialchars($val);
                 $btns .= "<a href=\"{$href}\" target=\"_blank\" rel=\"noopener\" class=\"fw-btn\" style=\"background:{$d['color']}\" aria-label=\"{$label}\" title=\"{$label}\">"
                     . "<svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">{$d['icon']}</svg>"
                     . "</a>";
@@ -325,11 +325,17 @@ HTML;
             $tplDir = TEMPLATES_PATH . '/' . $type . '/' . $section['template'];
 
             if ($html === '') {
-                $data = $section['data'] ?? [];
+                $data = $section['data']['vars'] ?? [];
                 if (file_exists($tplDir . '/template.html')) {
                     $tplHtml = file_get_contents($tplDir . '/template.html');
                     foreach ($data as $k => $v) {
-                        $tplHtml = str_replace('{{' . $k . '}}', htmlspecialchars((string)$v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), $tplHtml);
+                        // HTML_ prefix: inject raw HTML (no escaping); all other vars are escaped
+                        if (str_starts_with($k, 'HTML_')) {
+                            $safe = strip_tags((string)$v, '<input><textarea><select><option><label><div><span><p><br><ul><ol><li><strong><em><b><i><a>');
+                            $tplHtml = str_replace('{{' . $k . '}}', $safe, $tplHtml);
+                        } else {
+                            $tplHtml = str_replace('{{' . $k . '}}', htmlspecialchars((string)$v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), $tplHtml);
+                        }
                     }
                     $html = preg_replace('/\{\{[A-Z0-9_]+\}\}/', '', $tplHtml);
                 }
@@ -342,11 +348,24 @@ HTML;
             }
         }
 
+        // Normalize upload URLs: handles relative, root-relative (/tovcms/...), and absolute (http://...)
+        $html = $this->normalizeUploadUrls($html);
+        $css  = $this->normalizeUploadUrls($css);
+
         $varsCss = '';
         if ($vars) {
             $varsCss .= "#section-{$id}{";
             foreach ($vars as $k => $v) {
-                $varsCss .= htmlspecialchars($k) . ':' . htmlspecialchars($v) . ';';
+                // Normalize upload URLs in var values (bare paths, url(), absolute URLs)
+                $v = $this->normalizeUploadUrls((string)$v);
+                // CSS values go into <style>, not HTML — htmlspecialchars breaks url('...') into url(&#039;...&#039;)
+                // Escape quotes (apostrophes open CSS string tokens and can corrupt the entire rule block)
+                $safeCssVal = str_replace(
+                    ["'",    '"',    '</style>', '</Style>', '</STYLE>', '/*', '*/'],
+                    ["\\'",  '\\"',  '',          '',          '',          '',   ''],
+                    (string)$v
+                );
+                $varsCss .= '--' . htmlspecialchars($k) . ':' . $safeCssVal . ';';
             }
             $varsCss .= '}';
         }
@@ -362,5 +381,17 @@ HTML;
         $visible = ($section['visible'] ?? true) ? '' : ' style="opacity:0.4;pointer-events:none;"';
 
         return "\n{$styleBlock}\n<div id=\"section-{$id}\" class=\"cms-section cms-section-{$type}\"{$adminAttrs}{$visible}>\n{$html}\n</div>\n{$scriptBlock}\n";
+    }
+
+    private function normalizeUploadUrls(string $content): string {
+        $base = BASE_URL . '/data/uploads/';
+        // Replace any prefix before data/uploads/ — handles:
+        // relative (data/uploads/), root-relative (/tovcms/data/uploads/),
+        // absolute (http://host/path/data/uploads/), and bare var values
+        return preg_replace(
+            '~(?:https?://[^/\s"\']+)?(?:/(?!data/uploads/)[^/\s"\']*)*/?data/uploads/~',
+            $base,
+            $content
+        );
     }
 }

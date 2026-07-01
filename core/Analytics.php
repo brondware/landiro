@@ -1,6 +1,6 @@
 <?php
 class Analytics {
-    private string $dir;
+    private $dir;
 
     public function __construct() {
         $this->dir = DATA_PATH . '/analytics';

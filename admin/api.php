@@ -106,7 +106,7 @@ switch ($action) {
 
     case 'landing_bulk':
         $bulkAction = $input['bulk_action'] ?? '';
-        $slugs      = array_filter((array)($input['slugs'] ?? []), fn($s) => preg_match('/^[a-z0-9-]+$/', $s));
+        $slugs      = array_filter((array)($input['slugs'] ?? []), function($s) { return preg_match('/^[a-z0-9-]+$/', $s); });
         if (!$slugs) respond(['success' => false, 'error' => 'Не вказано лендинги']);
         $count = 0;
         foreach ($slugs as $s) {

@@ -1,6 +1,6 @@
 <?php
 class Presets {
-    private string $dir;
+    private $dir;
 
     public function __construct() {
         $this->dir = DATA_PATH . '/presets';
@@ -30,7 +30,7 @@ class Presets {
             $d = json_decode(file_get_contents($f), true);
             if ($d) $list[] = $d;
         }
-        usort($list, fn($a, $b) => strtotime($b['created_at']) - strtotime($a['created_at']));
+        usort($list, function($a, $b) { return strtotime($b['created_at']) - strtotime($a['created_at']); });
         return $list;
     }
 

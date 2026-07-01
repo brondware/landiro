@@ -29,8 +29,22 @@ $templateManager = new Template();
 $types = Template::$SECTION_TYPES;
 $typeInfo = $types[$section['type']] ?? ['label' => $section['type'], 'color' => '#888'];
 
-// Завантажуємо мету шаблону для отримання CSS змінних
+// Завантажуємо мету шаблону для отримання CSS змінних та fallback-контенту
 $tmplMeta = $templateManager->get($section['type'], $section['template'] ?? '') ?? [];
+
+// Template reference mode: section stores html/css/js="" and reads from template files at render time.
+// Load template file content into the code editor as fallback so the user can see and edit the code.
+$editCss = $section['css'] ?? '';
+$editJs  = $section['js']  ?? '';
+$isTemplateMode = !empty($section['template'])
+    && $editHtml === ''
+    && $editCss  === ''
+    && $editJs   === '';
+if ($isTemplateMode) {
+    $editHtml = $tmplMeta['html'] ?? '';
+    $editCss  = $tmplMeta['css']  ?? '';
+    $editJs   = $tmplMeta['js']   ?? '';
+}
 
 $renderer = new Renderer();
 ?><!DOCTYPE html>
@@ -182,15 +196,21 @@ $renderer = new Renderer();
           <button class="code-tab active" data-lang="html" onclick="setCodeLang('html')">HTML</button>
           <button class="code-tab" data-lang="css" onclick="setCodeLang('css')">CSS</button>
           <button class="code-tab" data-lang="js" onclick="setCodeLang('js')">JavaScript</button>
+          <?php if ($isTemplateMode): ?>
+          <span class="code-tab-badge" title="Код завантажений з файлів шаблону <?= htmlspecialchars($section['template'] ?? '') ?>. Після збереження стане власним кодом секції.">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Шаблон: <?= htmlspecialchars($section['template'] ?? '') ?>
+          </span>
+          <?php endif; ?>
         </div>
         <div id="code-html" class="code-panel">
           <textarea id="editor-html"><?= htmlspecialchars($editHtml) ?></textarea>
         </div>
         <div id="code-css" class="code-panel hidden">
-          <textarea id="editor-css"><?= htmlspecialchars($section['css'] ?? '') ?></textarea>
+          <textarea id="editor-css"><?= htmlspecialchars($editCss) ?></textarea>
         </div>
         <div id="code-js" class="code-panel hidden">
-          <textarea id="editor-js"><?= htmlspecialchars($section['js'] ?? '') ?></textarea>
+          <textarea id="editor-js"><?= htmlspecialchars($editJs) ?></textarea>
         </div>
         <div class="code-actions">
           <span style="font-size:12px;color:#64748b;">Ctrl+S — зберегти</span>

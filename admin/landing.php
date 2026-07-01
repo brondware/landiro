@@ -626,8 +626,10 @@ $stats = (new Analytics())->getStats($slug);
 
 <script>
 const LANDING_SLUG = <?= json_encode($slug) ?>;
-const ADMIN_URL = <?= json_encode(ADMIN_URL) ?>;
-const PUBLISHED = <?= json_encode($landing['published']) ?>;
+const ADMIN_URL    = <?= json_encode(ADMIN_URL) ?>;
+const PUBLISHED    = <?= json_encode($landing['published']) ?>;
+const CSRF_TOKEN   = <?= json_encode(Auth::csrf()) ?>;
+console.log('[cms] block1 loaded, LANDING_SLUG=', LANDING_SLUG, 'ADMIN_URL=', ADMIN_URL);
 
 async function testWebhook() {
   const url = document.getElementById('set_webhook_url')?.value.trim();
@@ -659,9 +661,7 @@ function toggleCountdownType() {
   document.getElementById('cd_duration_wrap').style.display = type === 'session' ? '' : 'none';
 }
 
-// Sync color picker <-> text input
-document.getElementById('cd_bg_color').addEventListener('input', e => { document.getElementById('cd_bg_color_text').value = e.target.value; });
-document.getElementById('cd_text_color').addEventListener('input', e => { document.getElementById('cd_text_color_text').value = e.target.value; });
+// Color sync handled by admin.js (querySelectorAll input[type="color"])
 
 async function saveCountdown() {
   const res = await api('landing_save', {
@@ -818,6 +818,11 @@ async function clearAbTest(sectionId) {
 <script src="<?= BASE_URL ?>/assets/js/landing.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
+// Fallback constants for second script block (in case first block's const scope is not accessible)
+var _LANDING_SLUG = <?= json_encode($slug) ?>;
+var _CSRF_TOKEN   = <?= json_encode(Auth::csrf()) ?>;
+var _ADMIN_URL    = <?= json_encode(ADMIN_URL) ?>;
+
 // ── Color sync for sticky bar ────────────────────────────
 ['bar_bg','bar_fg'].forEach(id => {
   const picker = document.getElementById(id);
@@ -841,16 +846,24 @@ const FB_TYPES = [
 
 async function openFormBuilder(sectionId) {
   fbSectionId = sectionId;
-  const res = await api('landing_get', { slug: LANDING_SLUG });
-  if (!res.success) return;
-  const sec = res.landing.sections.find(s => s.id === sectionId);
-  const fields = sec?.data?.fields || defaultFields();
-  renderFbFields(fields);
-  document.getElementById('formBuilderModal').classList.add('open');
+  renderFbFields(defaultFields());
+  document.getElementById('formBuilderModal').classList.add('active');
+  try {
+    const slug = (typeof LANDING_SLUG !== 'undefined' ? LANDING_SLUG : _LANDING_SLUG);
+    const res = await fetch(_ADMIN_URL + '/api.php?action=landing_get', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': _CSRF_TOKEN },
+      body: JSON.stringify({ slug })
+    }).then(r => r.json());
+    if (res.success) {
+      const sec = res.landing.sections.find(s => s.id === sectionId);
+      if (sec?.data?.fields?.length) renderFbFields(sec.data.fields);
+    }
+  } catch(e) {}
 }
 
 function closeFormBuilder() {
-  document.getElementById('formBuilderModal').classList.remove('open');
+  document.getElementById('formBuilderModal').classList.remove('active');
   fbSectionId = null;
 }
 
@@ -905,25 +918,40 @@ function fbGetFields() {
   });
 }
 
+function fbFieldsToHtml(fields) {
+  // Skip name/phone — they are hardcoded in template; render extra fields only
+  const skip = new Set(['name', 'phone']);
+  return fields
+    .filter(f => !skip.has(f.name) && f.type !== 'hidden')
+    .map(f => {
+      if (f.type === 'textarea')
+        return `<textarea class="field" name="${f.name}" placeholder="${f.placeholder}"${f.required ? ' required' : ''}></textarea>`;
+      return `<input class="field" type="${f.type}" name="${f.name}" placeholder="${f.placeholder}"${f.required ? ' required' : ''}>`;
+    }).join('\n');
+}
+
 async function fbSave() {
   if (!fbSectionId) return;
   const fields = fbGetFields();
   if (!fields.length) return alert('Додайте хоча б одне поле');
+  const extraHtml = fbFieldsToHtml(fields);
 
-  const html = fbGenerateHtml(fields);
-
-  // Save fields to section data and regenerate HTML
-  const res = await api('section_update', {
-    slug: LANDING_SLUG,
-    section_id: fbSectionId,
-    data: { html, data: { fields } },
-  });
+  let res;
+  try {
+    const slug = (typeof LANDING_SLUG !== 'undefined' ? LANDING_SLUG : _LANDING_SLUG);
+    // Save extra fields as HTML_EXTRA_FIELDS var + store raw fields list; never overwrite html
+    res = await fetch(_ADMIN_URL + '/api.php?action=section_update', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': _CSRF_TOKEN },
+      body: JSON.stringify({ slug, section_id: fbSectionId, data: { data: { fields, vars: { HTML_EXTRA_FIELDS: extraHtml } } } })
+    }).then(r => r.json());
+  } catch(e) { alert('api error: ' + e.message); return; }
 
   if (res.success) {
     closeFormBuilder();
     showNotice('Форму оновлено!');
   } else {
-    alert(res.error || 'Помилка');
+    alert('Збереження не вдалось: ' + (res.error || 'невідома помилка'));
   }
 }
 

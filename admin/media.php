@@ -27,7 +27,7 @@ if ($uploadsDir && is_dir($uploadsDir)) {
             'ext'   => $ext,
         ];
     }
-    usort($files, fn($a, $b) => $b['mtime'] - $a['mtime']);
+    usort($files, function($a, $b) { return $b['mtime'] - $a['mtime']; });
 }
 
 function humanSize(int $bytes): string {
@@ -132,9 +132,10 @@ function humanSize(int $bytes): string {
 
 <script src="<?= BASE_URL ?>/assets/js/admin.js"></script>
 <script>
-const ADMIN_URL = <?= json_encode(ADMIN_URL) ?>;
+const ADMIN_URL    = <?= json_encode(ADMIN_URL) ?>;
 const LANDING_SLUG = <?= json_encode($selectedSlug) ?>;
-const BASE_URL = <?= json_encode(BASE_URL) ?>;
+const BASE_URL     = <?= json_encode(BASE_URL) ?>;
+const CSRF_TOKEN   = <?= json_encode(Auth::csrf()) ?>;
 
 async function deleteFile(name) {
   if (!confirm('Видалити файл "' + name + '"?')) return;

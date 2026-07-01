@@ -123,16 +123,20 @@ async function addSection(type, templateId) {
 }
 
 async function cloneSection(sectionId) {
+  console.log('[cms] cloneSection', sectionId, 'slug=', LANDING_SLUG);
   const res = await api('section_clone', { slug: LANDING_SLUG, section_id: sectionId });
+  console.log('[cms] cloneSection res', res);
   if (res.success) {
     location.reload();
   } else {
-    alert(res.error || 'Помилка клонування секції');
+    alert('Помилка клонування: ' + (res.error || JSON.stringify(res)));
   }
 }
 
 async function toggleSection(sectionId, btn) {
+  console.log('[cms] toggleSection', sectionId, 'slug=', LANDING_SLUG);
   const res = await api('section_toggle', { slug: LANDING_SLUG, section_id: sectionId });
+  console.log('[cms] toggleSection res', res);
   if (res.success) {
     const item = btn.closest('.section-item');
     item.dataset.visible = res.visible ? '1' : '0';
@@ -155,7 +159,10 @@ async function toggleSection(sectionId, btn) {
 
 async function deleteSection(sectionId) {
   if (!confirm('Видалити секцію? Це незворотно.')) return;
+  console.log('[cms] deleteSection', sectionId, 'slug=', LANDING_SLUG);
   const res = await api('section_delete', { slug: LANDING_SLUG, section_id: sectionId });
+  console.log('[cms] deleteSection res', res);
+  if (!res.success) { alert('Помилка видалення: ' + (res.error || JSON.stringify(res))); return; }
   if (res.success) {
     const item = document.querySelector('.section-item[data-id="' + sectionId + '"]');
     if (item) item.remove();

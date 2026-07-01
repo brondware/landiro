@@ -1,6 +1,6 @@
 <?php
 class OrderLog {
-    private string $dir;
+    private $dir;
 
     public function __construct() {
         $this->dir = DATA_PATH . '/orders';
@@ -56,7 +56,7 @@ class OrderLog {
         return $this->updateField($slug, $orderId, 'note', substr(strip_tags($note), 0, 500));
     }
 
-    private function updateField(string $slug, string $orderId, string $field, mixed $value): bool {
+    private function updateField(string $slug, string $orderId, string $field, $value): bool {
         $file = $this->dir . '/' . $slug . '.json';
         $orders = $this->loadRaw($file);
         $found = false;
@@ -75,7 +75,7 @@ class OrderLog {
     public function delete(string $slug, string $orderId): bool {
         $file = $this->dir . '/' . $slug . '.json';
         $orders = $this->loadRaw($file);
-        $orders = array_values(array_filter($orders, fn($o) => $o['id'] !== $orderId));
+        $orders = array_values(array_filter($orders, function($o) use ($orderId) { return $o['id'] !== $orderId; }));
         return file_put_contents($file, json_encode($orders, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), LOCK_EX) !== false;
     }
 
@@ -122,7 +122,7 @@ class OrderLog {
         }
         $fields = array_merge($fields, ['utm_source', 'utm_medium', 'utm_campaign', 'ab_variant']);
         $rows = [];
-        $rows[] = implode(';', array_map(fn($f) => '"' . $f . '"', $fields));
+        $rows[] = implode(';', array_map(function($f) { return '"' . $f . '"'; }, $fields));
         foreach ($orders as $o) {
             $row = [];
             foreach ($fields as $f) {

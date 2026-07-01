@@ -117,17 +117,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isCmsForm) {
         if (!empty($response['success'])) {
             $_SESSION[$rateKey] = time();
             $analytics->order($slug);
-            // Determine which A/B variant the user saw
-            $abVariantSeen = '';
-            if (!empty($postData['_ab_variants']) && is_array($postData['_ab_variants'])) {
-                $abVariantSeen = implode(',', array_map(
-                    fn($k, $v) => $k . ':' . $v,
-                    array_keys($postData['_ab_variants']),
-                    array_values($postData['_ab_variants'])
-                ));
-            }
-            // Log the order (always, before handler failures)
-            $savedOrder = $orderLog->save($slug, $postData, $abVariantSeen);
+            // Log the order
+            $savedOrder = $orderLog->save($slug, $postData, '');
             // Notifications (non-blocking)
             if ($savedOrder) {
                 if (Settings::get('telegram_enabled')) {
@@ -136,16 +127,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isCmsForm) {
                 @Mailer::sendOrder($landing['title'] ?? $slug, $savedOrder);
                 @Webhook::sendOrder($landing['title'] ?? $slug, $slug, $savedOrder, $landing['webhook_url'] ?? '');
             }
-            // Track A/B conversion if variant info is present
-            if (!empty($postData['_ab_variants']) && is_array($postData['_ab_variants'])) {
-                foreach ($postData['_ab_variants'] as $shortId => $v) {
-                    // Match short ID back to full section ID
-                    foreach ($landing['sections'] as $s) {
-                        if (!empty($s['ab_html']) && substr(str_replace('-', '', $s['id']), 0, 8) === $shortId) {
-                            $analytics->abConvert($slug, $s['id'], $v === 'b' ? 'b' : 'a');
-                            break;
-                        }
-                    }
+            // Track A/B conversion via cookies (server-set cookie is the source of truth)
+            foreach ($landing['sections'] as $s) {
+                if (empty($s['ab_html'])) continue;
+                $cKey = '_ab_' . substr(str_replace('-', '', $s['id']), 0, 8);
+                if (isset($_COOKIE[$cKey])) {
+                    $analytics->abConvert($slug, $s['id'], $_COOKIE[$cKey]);
                 }
             }
         }

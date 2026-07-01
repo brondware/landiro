@@ -1,7 +1,7 @@
 <?php
 class Telegram {
-    private string $token;
-    private string $chatId;
+    private $token;
+    private $chatId;
 
     public function __construct(string $token, string $chatId) {
         $this->token  = trim($token);
@@ -37,7 +37,7 @@ class Telegram {
         if (!empty($order['utms'])) {
             $lines[] = '';
             $utmStr = implode(' · ', array_map(
-                fn($k, $v) => str_replace('utm_', '', $k) . ': ' . htmlspecialchars($v),
+                function($k, $v) { return str_replace('utm_', '', $k) . ': ' . htmlspecialchars($v); },
                 array_keys($order['utms']),
                 $order['utms']
             ));

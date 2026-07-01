@@ -32,7 +32,7 @@ foreach ($allOrders as $o) {
 }
 
 // Filter
-$orders = $filterStatus === 'all' ? $allOrders : array_values(array_filter($allOrders, fn($o) => ($o['status'] ?? 'new') === $filterStatus));
+$orders = $filterStatus === 'all' ? $allOrders : array_values(array_filter($allOrders, function($o) use ($filterStatus) { return ($o['status'] ?? 'new') === $filterStatus; }));
 $total  = count($orders);
 
 // Revenue summary for filtered orders
@@ -278,8 +278,9 @@ $statusBg     = ['new' => '#eff6ff', 'called' => '#fffbeb', 'confirmed' => '#f0f
 
 <script src="<?= BASE_URL ?>/assets/js/admin.js"></script>
 <script>
-const ADMIN_URL = <?= json_encode(ADMIN_URL) ?>;
+const ADMIN_URL    = <?= json_encode(ADMIN_URL) ?>;
 const LANDING_SLUG = <?= json_encode($selectedSlug) ?>;
+const CSRF_TOKEN   = <?= json_encode(Auth::csrf()) ?>;
 
 const STATUS_LABELS = <?= json_encode($statusLabels) ?>;
 const STATUS_COLORS = <?= json_encode($statusColors) ?>;

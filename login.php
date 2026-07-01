@@ -7,6 +7,11 @@ if (Auth::check()) {
     exit;
 }
 
+if (file_exists(__DIR__ . '/setup.php') && password_verify('admin123', ADMIN_PASSWORD)) {
+    header('Location: ' . BASE_URL . '/setup.php');
+    exit;
+}
+
 // Brute-force protection (file-based per IP, 5 attempts → 5 min lockout)
 define('LOGIN_ATTEMPTS_DIR', DATA_PATH . '/login_attempts');
 

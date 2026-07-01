@@ -105,8 +105,9 @@ foreach (array_reverse($historyFiles) as $file) {
 
 <script src="<?= BASE_URL ?>/assets/js/admin.js"></script>
 <script>
-const ADMIN_URL = <?= json_encode(ADMIN_URL) ?>;
+const ADMIN_URL    = <?= json_encode(ADMIN_URL) ?>;
 const LANDING_SLUG = <?= json_encode($slug) ?>;
+const CSRF_TOKEN   = <?= json_encode(Auth::csrf()) ?>;
 
 async function restoreVersion(file, label) {
   if (!confirm('Відновити версію від ' + label + '?\n\nПоточний стан збережеться як нова версія.')) return;

@@ -240,21 +240,30 @@ function scheduleAutoSave() {
 async function saveSection(silent = false) {
   clearTimeout(autoSaveTimer);
 
-  /* Get current HTML from iframe (waits up to 1.5s) */
-  const iframeHtml = await getIframeHtml();
-  const html = (iframeHtml !== null) ? iframeHtml : (cmEditors['html']?.getValue() ?? '');
+  let html;
+  if (currentMode === 'code') {
+    /* Code mode: always save what the user typed in CodeMirror, not iframe's rendered HTML */
+    html = cmEditors['html']?.getValue() ?? '';
+  } else {
+    /* Visual mode: get live DOM HTML from iframe (reflects inline edits) */
+    const iframeHtml = await getIframeHtml();
+    html = (iframeHtml !== null) ? iframeHtml : (cmEditors['html']?.getValue() ?? '');
 
-  /* Sync CM HTML silently */
-  if (iframeHtml !== null && cmEditors['html']) {
-    const cur = cmEditors['html'].getValue();
-    if (cur !== iframeHtml && iframeHtml) {
-      cmEditors['html'].setValue(iframeHtml);
+    /* Sync CM HTML silently so Code mode shows current state */
+    if (iframeHtml !== null && cmEditors['html']) {
+      const cur = cmEditors['html'].getValue();
+      if (cur !== iframeHtml && iframeHtml) {
+        cmEditors['html'].setValue(iframeHtml);
+      }
     }
   }
 
   const css = cmEditors['css']?.getValue()  ?? '';
   const js  = cmEditors['js']?.getValue()   ?? '';
   const php = cmEditors['php']?.getValue()  ?? '';
+
+  // Normalize upload URLs for portability: strip BASE_URL so stored HTML has relative paths
+  html = html.split(BASE_URL + '/data/uploads/').join('data/uploads/');
 
   let res;
   if (typeof AB_VARIANT !== 'undefined' && AB_VARIANT === 'b') {

@@ -36,4 +36,16 @@ class Auth {
     public static function verifyCsrf(string $token): bool {
         return isset($_SESSION['cms_csrf']) && hash_equals($_SESSION['cms_csrf'], $token);
     }
+
+    public static function checkCsrf(): void {
+        $token = $_POST['_csrf'] ?? ($_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
+        if (!self::verifyCsrf($token)) {
+            http_response_code(403);
+            exit('Forbidden');
+        }
+    }
+
+    public static function csrfField(): string {
+        return '<input type="hidden" name="_csrf" value="' . htmlspecialchars(self::csrf(), ENT_QUOTES) . '">';
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 class Landing {
-    private string $dataPath;
+    private $dataPath;
 
     public function __construct() {
         $this->dataPath = LANDINGS_DATA_PATH;
@@ -23,7 +23,7 @@ class Landing {
                 ];
             }
         }
-        usort($landings, fn($a, $b) => strcmp($b['updated_at'], $a['updated_at']));
+        usort($landings, function($a, $b) { return strcmp($b['updated_at'], $a['updated_at']); });
         return $landings;
     }
 
@@ -120,6 +120,16 @@ class Landing {
         if (!$landing) return false;
         foreach ($landing['sections'] as &$section) {
             if ($section['id'] === $sectionId) {
+                // Deep-merge data so form builder additions don't wipe existing vars
+                if (isset($data['data']) && is_array($data['data'])) {
+                    $existing = $section['data'] ?? [];
+                    $incoming = $data['data'];
+                    if (isset($incoming['vars']) && isset($existing['vars']) && is_array($existing['vars'])) {
+                        $incoming['vars'] = array_merge($existing['vars'], $incoming['vars']);
+                    }
+                    $section['data'] = array_merge($existing, $incoming);
+                    unset($data['data']);
+                }
                 $section = array_merge($section, $data);
                 return $this->save($landing);
             }
@@ -132,7 +142,7 @@ class Landing {
         if (!$landing) return false;
         $landing['sections'] = array_values(array_filter(
             $landing['sections'],
-            fn($s) => $s['id'] !== $sectionId
+            function($s) use ($sectionId) { return $s['id'] !== $sectionId; }
         ));
         return $this->save($landing);
     }

@@ -272,7 +272,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 <script src="<?= BASE_URL ?>/assets/js/admin.js"></script>
 <script>
-const ADMIN_URL = <?= json_encode(ADMIN_URL) ?>;
+const ADMIN_URL  = <?= json_encode(ADMIN_URL) ?>;
+const CSRF_TOKEN = <?= json_encode(Auth::csrf()) ?>;
 
 async function saveWebhook() {
   const url = document.getElementById('global_webhook_url').value.trim();

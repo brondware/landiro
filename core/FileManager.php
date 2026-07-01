@@ -38,11 +38,9 @@ class FileManager {
 
     private function convertToWebP(string $src, string $mime, string $dest): bool {
         try {
-            $img = match($mime) {
-                'image/jpeg' => imagecreatefromjpeg($src),
-                'image/png'  => imagecreatefrompng($src),
-                default => null,
-            };
+            if ($mime === 'image/jpeg')     $img = imagecreatefromjpeg($src);
+            elseif ($mime === 'image/png')  $img = imagecreatefrompng($src);
+            else                            $img = null;
             if (!$img) return false;
             $result = imagewebp($img, $dest, 85);
             imagedestroy($img);
@@ -53,13 +51,11 @@ class FileManager {
     }
 
     private function getExtension(string $mime): string {
-        return match($mime) {
-            'image/jpeg'    => 'jpg',
-            'image/png'     => 'png',
-            'image/gif'     => 'gif',
-            'image/webp'    => 'webp',
-            'image/svg+xml' => 'svg',
-            default         => 'jpg',
-        };
+        if ($mime === 'image/jpeg')     return 'jpg';
+        if ($mime === 'image/png')      return 'png';
+        if ($mime === 'image/gif')      return 'gif';
+        if ($mime === 'image/webp')     return 'webp';
+        if ($mime === 'image/svg+xml')  return 'svg';
+        return 'jpg';
     }
 }
